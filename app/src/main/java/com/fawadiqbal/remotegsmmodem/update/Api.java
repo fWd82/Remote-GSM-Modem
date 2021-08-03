@@ -20,7 +20,7 @@ public interface Api {
 
 //  MainActivity -> updateSendSmsValue(int id, int status)
 //  Update Link is:  exampleurl.com/api../test_api.php?action=update&id=1&status=1
-
+//
 
 //  @GET("test_api.php?action=update&id=x&status=x") id= 1< status=1|0
     @GET()

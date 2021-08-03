@@ -80,6 +80,7 @@ public class MainActivity extends AppCompatActivity {
 
     public static String linkUrl = "";
 
+    // Not using now
 //    public static String getLink() {
 //        return linkUrl;
 //    }
