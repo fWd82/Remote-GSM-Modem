@@ -1,0 +1,32 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="example.javatpoint.com.optionmenu.MainActivity">
+
+    <item  android:id="@+id/settings"
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_baseline_settings_24"
+        android:title="Settings"/>
+
+    <item  android:id="@+id/home"
+        android:icon="@drawable/ic_baseline_send_24"
+        android:title="Home"/>
+
+    <item  android:id="@+id/sendsms"
+        android:icon="@drawable/ic_baseline_send_24"
+        android:title="Send SMS"/>
+
+    <item  android:id="@+id/login_register"
+        android:icon="@drawable/ic_baseline_settings_input_antenna_24"
+        android:title="Login Register"/>
+
+    <item  android:id="@+id/tutorial"
+        android:icon="@drawable/ic_baseline_menu_book_24"
+        android:title="x Tutorial"/>
+
+    <item  android:id="@+id/about"
+        android:icon="@drawable/ic_baseline_info_24"
+        android:title="x About"
+
+        app:showAsAction="withText"/>
+</menu>

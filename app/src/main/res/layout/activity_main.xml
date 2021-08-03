@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F1E9FB"
+    tools:context=".MainActivity"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+
+
+        <TextView
+            android:id="@+id/tvRetroResponse_status01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="35dp"
+            android:padding="5dp"
+            android:rotation="0"
+            android:rotationX="28"
+            android:rotationY="0"
+            android:text="REMOTE GSM MODEM"
+            android:textAllCaps="false"
+            android:textColor="#376501"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvRetroResponse_status02"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginTop="1dp"
+            android:padding="4dp"
+            android:text="Send SMS from Remote Server directly through your Cell phone . "
+            android:textAllCaps="false"
+            android:textColor="#376501"
+            android:textSize="14sp"
+            android:textStyle="normal" />
+
+        <ImageButton
+            android:id="@+id/ibStartThread"
+            android:onClick="btnClickStartThread"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:adjustViewBounds="true"
+            android:background="@drawable/icons8_off"
+            android:layout_gravity="center"
+            android:paddingTop="10dp"
+            android:layout_marginTop="15dp"
+            android:scaleType="center"
+            android:contentDescription="Some Image" />
+
+        <TextView
+            android:id="@+id/tvRetroResponse"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:text="Response.."  />
+
+        <TextView
+            android:id="@+id/tvRetroResponse_status0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:text="Status: ..."  />
+
+
+        <TextView
+            android:id="@+id/tvRetroResponse_status"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
+            android:layout_marginLeft="28dp"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:text="Status: ..." />
+
+
+        <TextView
+            android:id="@+id/tvRetro1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="50dp"
+            android:padding="10dp"
+            android:text="Messages Found:"  />
+
+        <ListView
+            android:id="@+id/superListView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginLeft="4dp"
+            android:layout_marginTop="0dp"  />
+
+
+    </LinearLayout>
+</RelativeLayout>

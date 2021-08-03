@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Remote GSM Modem</string>
+    <string name="title_activity_send_s_m_s">Send SMS</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="title_activity_settings">Settings</string>
+    <string name="download_api">Download API from HERE which is simply written in PHP. Change your server name and user credentials in file API.php</string>
+    <string name="setting_up_app">Go to App and paste link of your API in box. Go to App and paste link of your API in boxGo to App and paste link of your API in boxGo to App and paste link of your API in boxGo to App and paste link of your API in boxGo to App and paste link of your API in box</string>
+</resources>

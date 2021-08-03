@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!--    <solid android:color="#ffffff" />-->
+<!--    <stroke-->
+<!--        android:width="1dp"-->
+<!--        android:color="#0059ff" />-->
+<!--    <corners android:radius="5dp" />-->
+
+<!--    <solid android:color="@color/purple_200"/>-->
+<!--    <corners android:radius="5dp" />-->
+
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+android:shape="oval">
+<solid
+    android:color="#48b3ff"/>
+    <size android:width="5dp" android:height="5dp"/>
+</shape>
