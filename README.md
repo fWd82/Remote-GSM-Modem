@@ -1,0 +1,82 @@
+# Remote GSM Modem
+Send SMS from Remote Server using your Android Phone. Use your Phone as GSM Modem for your Web Apps hosted remotely.
+
+
+# Introduction
+We pay huge amounts to companies providing `Short Messaging Services` and one single message cost a lot. For startups or testers it is hard for them to pay for huge services they don't even need. Why would we pay a lot while we can turn our smart phone as GSM Modem. 
+
+## How it works
+As your app is hosted remotly. You will create yourself API or use our [pre-built API](https://github.com/fWd82/Remote-GSM-Modem-API/) for sending messages. You will host that API on your server. By using the API you can send SMS just by calling `HTTP GET` request from your browser, app or even microcontrollers. The app will look for any new entry and will send message to specified `user` with `message` mentioned. The API will callback with `true` or `false` and will change the status entry for `pending` or `sent`
+
+
+## How it is different from GSM Modem
+Mr xx worked on GSM Modem and is used widely. Unfortunately it works only on local network. Your App must be on local machine and has same area network with your Android Phone. Alternativaly Remote GSM Modem works on Remote networks and even work with your App hosted locally. 
+
+
+
+# Setting Up API 
+
+## Database
+You can create yourself new database or if you have one just create a new `table` name it: `users_mobile`
+And inside create these columns: 
+
+    DB Name: YOUR_DB_NAME
+    Table Name: users_mobile  
+    
+    Columns:
+    id int(11)
+    name	varchar(255) 
+    mobile	varchar(255) 
+    message	varchar(255) 
+    status	tinyint(10) 
+    timestamp datetime
+    
+## API
+Download API from [HERE](https://github.com/fWd82/Remote-GSM-Modem-API/) which is written in PHP. Change credentials in file: `config.php` [here](https://github.com/fWd82/Remote-GSM-Modem-API/blob/main/config.php) on line number `4`, `5`, `6`.  
+
+You can check your API home: 
+
+    exampleurl.com/api/
+
+## HTTP API Calls
+### Sending Message
+Just call:
+    
+    https://exampleurl.com/api/gsm_api.php?action=insert&name=NAME&mobile=+9XXXXXXXXXX&message=ANY_MESSAGE&status=0
+
+Pass these parameters:
+
+    name STRING
+    mobile STRING
+    message STRING
+    status BOOLEAN
+
+Sometime we don't want to send message to some record that's why you can just pass `status=1`  
+
+### Updating Status of Pending Message
+Changing `status` of message that it successfully sent by calling this API endpoint:
+
+    https://exampleurl.com/api/gsm_api.php?action=update&id=1&status=1
+
+
+### General API Calls for App
+
+    Fetch New
+    https://exampleurl.com/api/gsm_api.php?action=fetch_new
+    
+    "api/test_api.php?action=fetch_new"
+
+    Fetch All: [ALL]
+    https://exampleurl.com/api/gsm_api.php?action=fetch_all
+
+    Update: [Change value from 0 to 1]
+    https://exampleurl.com/api/gsm_api.php?action=update&id=1&status=1
+    
+    INSERT:
+	https://exampleurl.com/api/gsm_api.php?action=insert&name=x&mobile=123&message=hello&status=1
+
+
+You can delete records after it hit 500 or some certain limit by `cron job`.
+
+
+
