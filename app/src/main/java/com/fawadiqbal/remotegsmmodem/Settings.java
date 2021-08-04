@@ -86,26 +86,21 @@ public class Settings extends AppCompatActivity {
 
             tvAPIFetchNew.setText(link_sp + "test_api.php?action=fetch_new");
             tvAPIUpdate.setText(link_sp + "test_api.php?action=update&id=1&status=1");
-
             tvAPISecretKeyEx.setText(link_sp + "test_api.php?action=fetch_new&key=" + etSecretKey.getText().toString());
-
-
         }
         else{
-            // your code is here
+            // There is no Link found for API
             Log.e(TAG, "link_sp is null");
             ll_fetch_new.setVisibility(View.GONE);
             ll_update_api.setVisibility(View.GONE);
-            //    .setVisibility(View.GONE);
             ll_secret_key_0.setVisibility(View.GONE);
-
         }
 
 
+        // Listen to text Changes for URL Link and update URLS TextViews
         etLink.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -134,7 +129,6 @@ public class Settings extends AppCompatActivity {
 
                 Log.d(TAG, "onKey: HEY ANY BUTTON IS CLICKED");
 
-
                 etLink.setBackgroundResource(R.drawable.et_normal);
 
                 Log.d(TAG, "onKey: " + etLink.getText() + "test_api.php?action=fetch_new");
@@ -142,9 +136,7 @@ public class Settings extends AppCompatActivity {
                 tvAPIUpdate.setText(etLink.getText() + "test_api.php?action=update&id=1&status=1");
                 tvAPISecretKeyEx.setText(etLink.getText().toString() + "test_api.php?action=fetch_new&key=" + etSecretKey.getText().toString());
 
-
                 Log.d(TAG, "onKey: ET LINK IS: " + etLink.getText());
-
             }
 
             @Override
@@ -171,6 +163,7 @@ public class Settings extends AppCompatActivity {
             }
         });
 
+        // Listen to text Changes for Secret Key and update URLS TextViews
         etSecretKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -217,7 +210,7 @@ public class Settings extends AppCompatActivity {
                 etSecretKey.addTextChangedListener(this);
             }
         });
-    }
+    } // eof onCreate()
 
 
     // Button Click to Save Settings
@@ -231,6 +224,7 @@ public class Settings extends AppCompatActivity {
                      60 / 60 = 1 sec gap;           120 / 60 = 2sec gap
          */
 
+        // If text boxes are empty
         if (etLink.getText().toString().trim().equals("")){
            Log.e(TAG, "etLink cannot be null");
            Log.d(TAG, "link log 1: " + link);
@@ -238,14 +232,12 @@ public class Settings extends AppCompatActivity {
             etLink.setBackgroundResource(R.drawable.et_error);
            Toast.makeText(this, "Link cannot be empty", Toast.LENGTH_LONG).show();
            return;
-
        }else{
             etLink.setBackgroundResource(R.drawable.et_normal);
             link = etLink.getText().toString();
             numOfMsgs = etNoOfMsgs.getText().toString();
             numOfMinutes = etNoOfMnts.getText().toString();
             secret_key = etSecretKey.getText().toString();
-
 
             Log.d(TAG, "link log 2: " + link);
 
@@ -267,7 +259,7 @@ public class Settings extends AppCompatActivity {
             myEdit.putString("timeGap_mnts", numOfMinutes);
             myEdit.putString("secret_key", secret_key);
 
-            Log.d(TAG, "btnSetClick: timeGap_msgz " + numOfMsgs);
+            Log.d(TAG, "btnSetClick: numOfMsgs " + numOfMsgs);
             Log.d(TAG, "btnSetClick: numOfMinutes " + numOfMinutes);
             Log.d(TAG, "btnSetClick: secret_key is: " + secret_key);
 
@@ -291,6 +283,5 @@ public class Settings extends AppCompatActivity {
         finish();
         mainActivity = new Intent(getApplicationContext(), MainActivity.class);
         startActivity(mainActivity);
-
     }
 }
