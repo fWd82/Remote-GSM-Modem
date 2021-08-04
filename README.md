@@ -91,7 +91,7 @@ You can delete records after it hit `500` or some certain limit by `cron job` or
 
 
 ## CONTRIBUTION
-Any contribution is welcome. Please push your pull requests to branch `development`
+Any contribution is welcome. Please push your changes to branch `development`
 
 ### Clone this repo
     git clone https://github.com/fWd82/Remote-GSM-Modem.git
