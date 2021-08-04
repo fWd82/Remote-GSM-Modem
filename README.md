@@ -63,8 +63,6 @@ Changing `status` of message that it successfully sent by calling this API endpo
 
     Fetch New
     https://exampleurl.com/api/gsm_api.php?action=fetch_new
-    
-    "api/test_api.php?action=fetch_new"
 
     Fetch All: [ALL]
     https://exampleurl.com/api/gsm_api.php?action=fetch_all
@@ -73,10 +71,10 @@ Changing `status` of message that it successfully sent by calling this API endpo
     https://exampleurl.com/api/gsm_api.php?action=update&id=1&status=1
     
     INSERT:
-	https://exampleurl.com/api/gsm_api.php?action=insert&name=x&mobile=123&message=hello&status=1
+    https://exampleurl.com/api/gsm_api.php?action=insert&name=x&mobile=123&message=hello&status=1
 
 
-You can delete records after it hit 500 or some certain limit by `cron job`.
+You can delete records after it hit 500 or some certain limit by `cron job` or whatever method you prefer just to not make your database bulky.
 
 
 
