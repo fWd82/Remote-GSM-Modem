@@ -9,7 +9,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
 
-//    public static String BASE_URL = "https://fawadiqbal.com/api/";
+//    public static String BASE_URL = "https://exampleurl.com/api/";
 //    String BASE_URL = MainActivity.getLink();
 
     private static RetrofitClient instance = null;
