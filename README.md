@@ -6,7 +6,7 @@ Send SMS from **Remote Server** using your **Android Phone**. Use your Phone as 
 We pay huge amounts to companies providing `Short Messaging Services` and one single message cost a lot. For startups or testers it is hard for them to pay for huge services they don't even need. Why would we pay a lot while we can turn our smart phone as GSM Modem. 
 
 ## How it works
-As your app is hosted remotly. You will create yourself API or use our [pre-built API](https://github.com/fWd82/Remote-GSM-Modem-API/) for sending messages. You will host that API on your server. By using the API you can send SMS just by calling `HTTP GET` request from your browser, app or even microcontrollers. The app will look for any new entry and will send message to specified `user` with `message` mentioned. The API will callback with `true` or `false` and will change the status entry for `pending` or `sent`
+As your app is hosted remotely. You may create yourself API or use our [pre-built API](https://github.com/fWd82/Remote-GSM-Modem-API/) for sending messages. You will host that API on your server. By using the API you can send SMS just by calling `HTTP GET` request from your browser, app or even microcontrollers. The app will look for any new entry and will send message to specified `user` with `message` mentioned. The API will callback with `true` or `false` and will change the status entry for `pending` or `sent`
 
 
 ## How it is different from GSM Modem
