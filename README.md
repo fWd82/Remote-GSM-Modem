@@ -70,77 +70,15 @@ Change value of status from `0` to `1` of record with `id=1` as below:
 
 ### General API Calls for App
 
-    Fetch All Records: [ALL]
-    https://exampleurl.com/api/gsm_api.php?action=fetch_all
-    
-    Fetch New Data (those status values are 0)
+    Fetch New Data (those status values are 0 | See if any message is pending that we need to send) 
     https://exampleurl.com/api/gsm_api.php?action=fetch_new
 
-    Update: [Change value from 0 to 1]
+    Update: [Change value from 0 to 1 | Send status is 0 so if successfully sent change value from 0 to 1]
     https://exampleurl.com/api/gsm_api.php?action=update&id=1&status=1
     
-    INSERT:
+    INSERT | SEND MESSAGE - By inserting new row our app will send message to specified mobile number:
     https://exampleurl.com/api/gsm_api.php?action=insert&name=NAME&mobile=+9XXXXXXXXXX&message=ANY_MESSAGE&status=0
 
-
-
-=========================
-# Setting Up API 
-
-## Database
-You can create yourself new database or if you have one just create a new `table` name it: `users_mobile`
-And inside create these columns: 
-
-    DB Name: YOUR_DB_NAME
-    Table Name: users_mobile  
-    
-    Columns:
-    id int(11)
-    name	varchar(255) 
-    mobile	varchar(255) 
-    message	varchar(255) 
-    status	tinyint(10) 
-    timestamp datetime
-    
-## API
-Download API from [HERE](https://github.com/fWd82/Remote-GSM-Modem-API/) which is written in PHP. Change credentials in file: `config.php` [here](https://github.com/fWd82/Remote-GSM-Modem-API/blob/main/config.php) on line number `4`, `5`, `6`.  
-
-You can check your API home: 
-
-    exampleurl.com/api/
-
-## HTTP API Calls
-### Sending Message
-Just call:
-    
-    https://exampleurl.com/api/gsm_api.php?action=insert&name=NAME&mobile=+9XXXXXXXXXX&message=ANY_MESSAGE&status=0
-
-Pass these parameters:
-
-    name STRING
-    mobile STRING
-    message STRING
-    status BOOLEAN
-
-Sometime we don't want to send message to some record that's why you can just pass `status=1`  
-
-### Updating Status of Pending Message
-Changing `status` of message that it successfully sent by calling this API endpoint:
-
-    https://exampleurl.com/api/gsm_api.php?action=update&id=1&status=1
-
-
-### General API Calls for App
-
-    Fetch New
-    https://exampleurl.com/api/gsm_api.php?action=fetch_new
-
-    Update: [Change value from 0 to 1]
-    https://exampleurl.com/api/gsm_api.php?action=update&id=1&status=1
-    
-    INSERT | SEND MESSAGE:
-    https://exampleurl.com/api/gsm_api.php?action=insert&name=x&mobile=123&message=hello&status=1
-    
     // Below aren't needed in our app but you can use it anyway
     Fetch All: [ALL]
     https://exampleurl.com/api/gsm_api.php?action=fetch_all
@@ -149,7 +87,7 @@ Changing `status` of message that it successfully sent by calling this API endpo
     http://localhost/api/gsm_api.php?action=delete&id=2
 
 
-You can delete records after it hit 500 or some certain limit by `cron job` or whatever method you prefer just to not make your database bulky.
+You can delete records after it hit `500` or some certain limit by `cron job` or whatever method you prefer just to not make your database bulky.
 
 
 ## CONTRIBUTION
