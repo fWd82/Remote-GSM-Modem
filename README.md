@@ -1,5 +1,5 @@
 # Remote GSM Modem
-Send SMS from Remote Server using your Android Phone. Use your Phone as GSM Modem for your Web Apps hosted remotely.
+Send SMS from **Remote Server** using your **Android Phone**. Use your Phone as GSM Modem for your Web Apps hosted remotely.
 
 
 # Introduction
