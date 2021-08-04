@@ -10,7 +10,7 @@ As your app is hosted remotly. You will create yourself API or use our [pre-buil
 
 
 ## How it is different from GSM Modem
-Mr xx worked on GSM Modem and is used widely. Unfortunately it works only on local network. Your App must be on local machine and has same area network with your Android Phone. Alternativaly Remote GSM Modem works on Remote networks and even work with your App hosted locally. 
+Mr [Sadiq Odho](https://github.com/sadiqodho) worked on [GSM Modem (SMS)](https://github.com/sadiqodho/GSM-Helper-Tool)) and is used widely. Unfortunately it works only on local network. Your App must be on local machine and has same area network with your Android Phone. Alternativaly Remote GSM Modem works on Remote networks and even work with your App hosted locally. 
 
 
 
