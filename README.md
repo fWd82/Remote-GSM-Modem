@@ -79,12 +79,13 @@ Change value of status from `0` to `1` of record with `id=1` as below:
     INSERT | SEND MESSAGE - By inserting new row our app will send message to specified mobile number:
     https://exampleurl.com/api/gsm_api.php?action=insert&name=NAME&mobile=+9XXXXXXXXXX&message=ANY_MESSAGE&status=0
 
+
     // Below aren't needed in our app but you can use it anyway
     Fetch All: [ALL]
     https://exampleurl.com/api/gsm_api.php?action=fetch_all
     
     [Delete Message / Del Record from DB]
-    http://localhost/api/gsm_api.php?action=delete&id=2
+    http://exampleurl/api/gsm_api.php?action=delete&id=2
 
 
 You can delete records after it hit `500` or some certain limit by `cron job` or whatever method you prefer just to not make your database bulky.
