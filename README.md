@@ -39,7 +39,7 @@ Now you are done with database part.
 ## API
 - Now Download API from [HERE](https://github.com/fWd82/Remote-GSM-Modem-API/) which is written in PHP. 
 - Go to your **File Manager** > **public_html**  create new directory/folder, name it **api** (or _GSM_API_) and paste content of API that you have downloaded in first step.
-- Change credentials in file: `config.php` [here](https://github.com/fWd82/Remote-GSM-Modem-API/blob/main/config.php) on line number `4`, `5`, `6` according to your settings.
+- Change credentials in file: `config.php` [here](https://github.com/fWd82/Remote-GSM-Modem-API/blob/main/config.php#L5) on line number `4`, `5`, `6` according to your settings.
 
 At this moment your DB & API is ready to test.
 
