@@ -10,76 +10,159 @@
     tools:layout_editor_absoluteY="1dp"
     tools:context=".SendSMS">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal"
+        >
 
-        <EditText
-            android:id="@+id/etNumber"
-            android:layout_width="271dp"
-            android:layout_height="47dp"
-            android:layout_marginTop="52dp"
-            android:ems="10"
-            android:hint="Enter Phone Number"
-            android:inputType="phone"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            android:autofillHints="034" />
-
-        <EditText
-            android:id="@+id/etMessage"
-            android:layout_width="268dp"
-            android:layout_height="96dp"
-            android:layout_marginTop="24dp"
-            android:ellipsize="end"
-            android:ems="10"
-            android:gravity="start|top"
-            android:hint="Enter Your Message"
-            android:inputType="textMultiLine"
-            android:maxLength="160"
-            android:text="This is testing message. "
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etNumber" />
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+<!--         Main Card -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:lineSpacingExtra="16sp"
-            android:text="SEND SMS"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:padding="20dp"
+            app:cardCornerRadius="30dp"
+            >
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:text="TEST"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center_horizontal"
+                >
 
-        <Button
-            android:id="@+id/btn_send_x"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="SEND"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/etMessage" />
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="30dp"
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                    android:background="@drawable/ic_baseline_send_24"
+                    android:maxWidth="20dp"
+                    android:maxHeight="20dp"
+                    android:minHeight="20dp"
+                    android:rotation="-19"
+                    android:scaleType="center" />
+
+                <!-- Test-->
+                <TextView
+                    android:id="@+id/tvTest"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="T E S T"
+                    android:textSize="24sp"
+                    />
+
+
+                <!--        Send message-->
+                <TextView
+                    android:id="@+id/tvSendMsg"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:lineSpacingExtra="16sp"
+                    android:text="S E N D S M S"
+                    android:layout_gravity="center_horizontal"
+                    android:textSize="24sp"
+                    />
+
+                <!--        Mobile Number-->
+                <EditText
+                    android:id="@+id/etNumber"
+                    android:layout_margin="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:layout_marginTop="40dp"
+                    android:maxLength="13"
+                    android:hint="Enter Mobile Number"
+                    android:inputType="phone"
+                    android:autofillHints="034" />
+
+                <ProgressBar
+                    android:id="@+id/progressBar"
+                    style="@android:style/Widget.Material.Light.ProgressBar.Horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:max="160"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:progress="160"
+
+                    />
+
+                <!--        Message-->
+                <EditText
+                    android:id="@+id/etMessage"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:lines="5"
+                    android:ellipsize="end"
+                    android:layout_margin="10dp"
+                    android:ems="10"
+                    android:gravity="start"
+                    android:hint="Enter Your Message"
+                    android:inputType="textMultiLine"
+                    android:maxLength="160"  />
+
+
+
+<!--            Message Length-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="end"
+                android:layout_margin="8dp"
+                >
+
+                <!-- Length -->
+                <TextView
+                    android:id="@+id/tvTxtLength"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="16sp"
+                    android:layout_gravity="end"
+                    android:text="0"
+                    android:textSize="14sp"
+                    />
+
+                <!-- Length -->
+                <TextView
+                    android:id="@+id/tvTxtLengthTotal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:lineSpacingExtra="16sp"
+                    android:layout_gravity="end"
+                    android:gravity="end"
+                    android:text="/160"
+                    android:textSize="14sp"
+                    />
+
+            </LinearLayout>
+
+
+
+                <!-- Send button -->
+                <Button
+                    android:id="@+id/btn_send_x"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_margin="10dp"
+                    android:layout_gravity="center_horizontal"
+                    android:text="SEND"  />
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+    </LinearLayout>
 </ScrollView>

@@ -24,6 +24,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fawadiqbal.remotegsmmodem.JSONResponse;
+import com.fawadiqbal.remotegsmmodem.LoginRegActivity;
+import com.fawadiqbal.remotegsmmodem.Movie;
+import com.fawadiqbal.remotegsmmodem.MovieApi;
+import com.fawadiqbal.remotegsmmodem.R;
+import com.fawadiqbal.remotegsmmodem.SendSMS;
+import com.fawadiqbal.remotegsmmodem.Settings;
+import com.fawadiqbal.remotegsmmodem.Tutorial;
 import com.fawadiqbal.remotegsmmodem.update.Results;
 import com.fawadiqbal.remotegsmmodem.update.RetrofitClient;
 
@@ -43,16 +51,30 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Url;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity2 extends AppCompatActivity {
     TextView tvRetroResponse, tvRetroResponse_status, tvRetroResponse_status0;
+    TextView tvMessagesFound, tvMessagesFoundtxt;
+    TextView tvMsg_srno, tvMsg_name, tvMsg_mobile, tvMsg_msg, tvMsg_status;
+
     List<Movie> movieList;
     ImageButton ibButtonStart;
+
+    View card_view_settings, card_view_messages, card_view_on_off;
+
     Handler handler = new Handler();
+
     StringBuilder allStr;
+    int strMsg_srno;
+    String strMsg_name;
+    String strMsg_mobile;
+    String strMsg_msg;
+    String strMsg_status;
+
 
     Intent settings_intent, sendsms_intent, loginreg_intent, tutorial_intent;
 
-    MainThread mainThread;
+    com.fawadiqbal.remotegsmmodem.MainActivity2.MainThread mainThread;
+
     ListView superListView;
     private static final String TAG = "TAG";
     private volatile boolean exit = false;
@@ -89,9 +111,17 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main2);
 
         superListView           = findViewById(R.id.superListView);
+
+        tvMessagesFound         = findViewById(R.id.tvMessagesFound);
+        tvMessagesFoundtxt      = findViewById(R.id.tvMessagesFoundtxt);
+
+        card_view_settings      = findViewById(R.id.card_view_settings);
+        card_view_messages      = findViewById(R.id.card_view_messages);
+        card_view_on_off      = findViewById(R.id.card_view_on_off);
+
         tvRetroResponse         = findViewById(R.id.tvRetroResponse);
         tvRetroResponse_status  = findViewById(R.id.tvRetroResponse_status);
         tvRetroResponse_status0 = findViewById(R.id.tvRetroResponse_status0);
@@ -119,21 +149,21 @@ public class MainActivity extends AppCompatActivity {
         tutorial_intent = new Intent(this, Tutorial.class);
         tutorial_intent = new Intent(this, MainActivity2.class);
 
-         // updateSendSmsValue(1, 0);
+        // updateSendSmsValue(1, 0);
 
         // If no API Link found
         if (link_sp == null || link_sp.equals("")) {
             Log.e(TAG, "API Link is null");
-            tvRetroResponse.setText("API Link not set");
-            tvRetroResponse_status.setText("Please go to Settings and enter API Link");
-            MainActivity.this.finish();
+            tvMessagesFound.setText("API Link not set");
+            tvMessagesFoundtxt.setText("Please go to Settings and enter API Link");
+            com.fawadiqbal.remotegsmmodem.MainActivity2.this.finish();
             startActivity(settings_intent);
         }
         Log.e(TAG, "Link is: " + link_sp);
 
         // If the app has no pin
         if(app_pin== null || app_pin.equals("")){
-            MainActivity.this.finish();
+            com.fawadiqbal.remotegsmmodem.MainActivity2.this.finish();
             startActivity(loginreg_intent);
         }
 
@@ -147,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
             ibButtonStart.animate().alpha(1f).translationYBy(-50).setDuration(1500);
 
             Log.d(TAG, "Method Loaded: Checking for flag value: " + is_thread_running);
-            
+
             if (is_thread_running) {
                 ibButtonStart.setBackgroundResource(R.drawable.icons8_on);
 
@@ -180,11 +210,11 @@ public class MainActivity extends AppCompatActivity {
         if(link_sp== null || link_sp.equals(""))
         {
             Log.e(TAG, "ALI Link is null");
-            tvRetroResponse.setText("API Link not set");
-            tvRetroResponse_status.setText("Please go to Settings and enter API Link");
+            tvMessagesFound.setText("API Link not set");
+            tvMessagesFoundtxt.setText("Please go to Settings and enter API Link");
             startActivity(settings_intent);
         }else{
-            mainThread = new MainThread(mobileSmscWaitTime);
+            mainThread = new MainActivity2.MainThread(mobileSmscWaitTime);
             mainThread.start();
         }
 
@@ -207,7 +237,7 @@ public class MainActivity extends AppCompatActivity {
     // ***************************************************************** //
 
     public void fetch_data() throws InterruptedException {
-        Log.d(TAG, "inside fetch_data() Method ");
+        Log.d(TAG, "Inside fetch_data() Method ");
         Log.d(TAG, "TIME: " + time);
 
         numberOfLoops++;
@@ -215,8 +245,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvRetroResponse_status0.setText("fetch_data(): Loops: " + numberOfLoops);
-                tvRetroResponse_status.setText("Fetching now. Loops: " + numberOfLoops);
+                tvMessagesFoundtxt.setText("No of Loops: " + numberOfLoops);
+                Log.d(TAG, "run: Fetching now. Loops: " + numberOfLoops);
             }
         });
 
@@ -277,6 +307,14 @@ public class MainActivity extends AppCompatActivity {
                             .append(num.getMessage()).append(" : \t")
                             .append(" Status: ").append(num.getStatus()).append(" \n");
 
+                    strMsg_srno = num.getId();
+                    strMsg_name = num.getName();
+                    strMsg_mobile = num.getMobile();
+                    strMsg_msg = num.getMessage();
+                    strMsg_status = num.getStatus();
+
+
+
                     // If  found new message , we will send right away.
                     if (num.getStatus().equals("0")){
                         // TODO Send unsent messages
@@ -310,12 +348,18 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
 //                        ArrayAdapter<Movie> myAdapter = new ArrayAdapter<Movie>(this, android.R.layout.simple_expandable_list_item_1, movieList);
 //                        superListView.setAdapter(myAdapter);
-//
-                        //superListView.setAdapter(new ArrayAdapter<Movie>(getApplicationContext(), android.R.layout.simple_list_item_1, jsonResponse.getMoviesArray()));
+//                        superListView.setAdapter(new ArrayAdapter<Movie>(getApplicationContext(), android.R.layout.simple_list_item_1, jsonResponse.getMoviesArray()));
 
 
-                        tvRetroResponse_status.setText("Fetching Finished..Loops: " + numberOfLoops);
-                        tvRetroResponse.setText("Fetched: \n" + allStr);
+                        tvMessagesFoundtxt.setText("Fetching Finished..Loops: " + numberOfLoops);
+                        // tvRetroResponse.setText("Fetched: \n" + allStr);
+
+                        tvMsg_srno.setText(strMsg_srno);
+                        tvMsg_name.setText(strMsg_name);
+                        tvMsg_mobile.setText(strMsg_mobile);
+                        tvMsg_msg.setText(strMsg_msg);
+                        tvMsg_status.setText(strMsg_msg);
+
                     }
                 });
 
@@ -326,9 +370,9 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<JSONResponse> call, Throwable throwable) {
                 // Error Messages:
 
-                tvRetroResponse.setText(throwable.toString());
+                tvMessagesFoundtxt.setText(throwable.toString());
                 Log.e(TAG, throwable.toString());
-                Toast.makeText(MainActivity.this,throwable.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(com.fawadiqbal.remotegsmmodem.MainActivity2.this,throwable.toString(),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -545,6 +589,9 @@ public class MainActivity extends AppCompatActivity {
     public void btnClickStartThread(View view) {
         Log.d(TAG, "btnClickStartThread: Button clicked 111: " + is_thread_running);
 
+
+
+
         if (isConnected()){
             if (is_thread_running){
                 start_thread();
@@ -597,6 +644,35 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.about:
                 Toast.makeText(getApplicationContext(), "About Selected", Toast.LENGTH_SHORT).show();
+
+
+
+                card_view_settings.setAlpha(1f);
+                card_view_settings.setTranslationX(500);
+                card_view_settings.animate().alpha(0f).translationXBy(500).setDuration(1500);
+
+                card_view_messages.setAlpha(1f);
+                card_view_messages.setTranslationX(-500);
+                card_view_messages.animate().alpha(0f).translationXBy(-500).setDuration(1500);
+
+                card_view_on_off.setAlpha(0f);
+                card_view_on_off.setTranslationY(0);
+                card_view_on_off.animate().alpha(1f).translationYBy(-340).setDuration(1500);
+
+                card_view_on_off.animate().withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+
+//                        card_view_settings.setVisibility(View.GONE);
+//                        card_view_messages.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
+
+
+                    }
+                });
+
+
+
                 return true;
             default:
                 return super.onOptionsItemSelected(item);

@@ -17,7 +17,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.RemoteGSMModem">
-        <activity android:name=".Tutorial"></activity>
+        <activity android:name=".MainActivity2"></activity>
+        <activity android:name=".Tutorial" />
         <activity android:name=".tutorial" />
         <activity
             android:name=".Settings"

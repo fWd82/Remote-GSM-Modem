@@ -12,12 +12,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.telephony.SmsManager;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -36,10 +43,12 @@ public class SendSMS extends AppCompatActivity {
     String SENT = "SMS_SENT";
     String DELIVERED = "SMS_DELIVERED";
     private Object[] array;
-
+    private static final String TAG = "SendSMS";
     Button btnSend;
+    ProgressBar progressBar;
     String number, messagetext, time;
     EditText etNumber, etMessage;
+    TextView tvTxtLength, tvTxtLengthTotal;
     final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
 
@@ -51,6 +60,9 @@ public class SendSMS extends AppCompatActivity {
         btnSend = findViewById(R.id.btn_send_x);
         etNumber = findViewById(R.id.etNumber);
         etMessage = findViewById(R.id.etMessage);
+        tvTxtLength = findViewById(R.id.tvTxtLength);
+        tvTxtLengthTotal = findViewById(R.id.tvTxtLengthTotal);
+        progressBar = findViewById(R.id.progressBar);
 
 
         if ((ContextCompat.checkSelfPermission(this, Manifest.permission.READ_SMS) +
@@ -77,29 +89,29 @@ public class SendSMS extends AppCompatActivity {
                 // REQUEST_CODE is an
                 // app-defined int constant. The callback method gets the
                 // result of the request.
-                //sendSMS("+923008048282", "Hi m16");
-                //sendSMS("+923008048282", "Hi m17");
+                //sendSMS("+923001234567", "Hi msg16");
+                //sendSMS("+923001234568", "Hi msg17");
             }
         }
 
         else {
             // Permission has already been granted
-            //sendSMS("+923008048282", "Hi m14");
-            // sendSMS("+923008048282", "Hi m15");
+            //sendSMS("+923001234567", "Hi m14");
+            // sendSMS("+923001234568", "Hi m15");
         }
 
 
-        ////////////////
-//        if (ContextCompat.checkSelfPermission(SendSMS2.this, Manifest.permission.SEND_SMS)
-//                != PackageManager.PERMISSION_GRANTED) {
-//            // Permission is not granted
-//            // Ask for permision
-//            ActivityCompat.requestPermissions(this,new String[] { Manifest.permission.SEND_SMS}, 1);
-//            Toast.makeText(SendSMS2.this, "SMS Granted", Toast.LENGTH_LONG).show();
-//            //
-//        }
 
+        if (ContextCompat.checkSelfPermission(SendSMS.this, Manifest.permission.SEND_SMS)
+                != PackageManager.PERMISSION_GRANTED) {
+            // Permission is not granted
+            // Ask for permision
+            ActivityCompat.requestPermissions(this,new String[] { Manifest.permission.SEND_SMS}, 1);
+            Toast.makeText(SendSMS.this, "SMS Granted", Toast.LENGTH_LONG).show();
+            //
+        }
 
+        // Send Message Button
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,12 +121,11 @@ public class SendSMS extends AppCompatActivity {
                 number = etNumber.getText().toString();
                 messagetext = etMessage.getText().toString();
 
-                Toast.makeText(SendSMS.this, time + " Send Button Clicked.." + number + " : " + messagetext, Toast.LENGTH_LONG).show();
+                // Toast.makeText(SendSMS.this, time + " Send Button Clicked.." + number + " : " + messagetext, Toast.LENGTH_LONG).show();
 
-
-                // Check For Number TextEdit
+                // Check For Number TextEdit if it empty
                 if (number.equals("")){
-                    Toast.makeText(getApplicationContext(), "Please Enter value for PIN", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please Enter mobile number", Toast.LENGTH_LONG).show();
                     etNumber.setError("Can't be Empty!");
                     etNumber.setBackgroundResource(R.drawable.et_error);
                     return;
@@ -122,9 +133,9 @@ public class SendSMS extends AppCompatActivity {
                     etNumber.setBackgroundResource(R.drawable.et_normal);
                 }
 
-                // Check For Message TextEdit
+                // Check For Message TextEdit if it is empty
                 if (messagetext.equals("")){
-                    Toast.makeText(getApplicationContext(), "Please Enter value for PIN", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "Please Enter your message", Toast.LENGTH_LONG).show();
                     etMessage.setError("Can't be Empty!");
                     etMessage.setBackgroundResource(R.drawable.et_error);
                     return;
@@ -134,15 +145,62 @@ public class SendSMS extends AppCompatActivity {
 
                 // If both Edit Texts are having values, Yes, send Demo message
                 if (!number.equals("") && !messagetext.equals("")){
-                    sendSMS(number, messagetext + " -- at " + time);
-                }
+                    if (isConnected()) {
+                        sendSMS(number, messagetext + "\n -- at " + time);
+                    }else{
+                        Toast.makeText(getApplicationContext(), "No internet connection!", Toast.LENGTH_LONG).show();
+                    } // eof if connected
+                } // eof if equals ""
 
+            } // eof onClick
+        }); // eof setOnClickListener
+
+        // Message Characters Count
+        etMessage.addTextChangedListener(new TextWatcher(){
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//                Log.d(TAG, "beforeTextChanged: s: " + s.length());
+//                Log.d(TAG, "beforeTextChanged: start: " + start);
+//                Log.d(TAG, "beforeTextChanged: count: " + count);
+//                tvTxtLength.setText("beforeTextChanged ");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                // Log.d(TAG, "onTextChanged: s: " + s.length());
+//                Log.d(TAG, "onTextChanged: start: " + start);
+//                Log.d(TAG, "onTextChanged: before: " + before);
+//                Log.d(TAG, "onTextChanged: count: " + count);
+//                tvTxtLength.setText("onTextChanged count: " + count);
+
+                progressBar.setProgress(160 - s.length());
+
+                if (s.length() > 159){
+                    tvTxtLength.setTextColor(Color.RED);
+                    tvTxtLengthTotal.setTextColor(Color.RED);
+                }else{
+                    tvTxtLength.setTextColor(Color.DKGRAY);
+                    tvTxtLengthTotal.setTextColor(Color.DKGRAY);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                // Log.d(TAG, "afterTextChanged: s:" + s.length());
+                tvTxtLength.setText("" + s.length());
             }
         });
 
     } // eof OnCreate
 
-
+    // Is internet connected
+    public boolean isConnected() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        return (info != null && info.isConnected());
+        // retrun true | false
+    } // eof isConnected()
 
     private void startSendMessages(){
         registerBroadCastReceivers();
