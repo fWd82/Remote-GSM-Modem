@@ -59,7 +59,7 @@ public class MainActivity2 extends AppCompatActivity {
     List<Movie> movieList;
     ImageButton ibButtonStart;
 
-    View card_view_settings, card_view_messages, card_view_on_off;
+    View card_view_settings, card_view_messages, card_view_on_off, card_view_statistics, card_view_messages_2;
 
     Handler handler = new Handler();
 
@@ -121,11 +121,22 @@ public class MainActivity2 extends AppCompatActivity {
         card_view_settings      = findViewById(R.id.card_view_settings);
         card_view_messages      = findViewById(R.id.card_view_messages);
         card_view_on_off      = findViewById(R.id.card_view_on_off);
+        card_view_statistics      = findViewById(R.id.card_view_statistics);
+        card_view_messages_2      = findViewById(R.id.card_view_messages_2);
 
         tvRetroResponse         = findViewById(R.id.tvRetroResponse);
         tvRetroResponse_status  = findViewById(R.id.tvRetroResponse_status);
         tvRetroResponse_status0 = findViewById(R.id.tvRetroResponse_status0);
         ibButtonStart           = findViewById(R.id.ibStartThread);
+
+
+        tvMsg_srno        = findViewById(R.id.tvMsg_srno);
+        tvMsg_name        = findViewById(R.id.tvMsg_name);
+        tvMsg_mobile      = findViewById(R.id.tvMsg_mobile);
+        tvMsg_msg         = findViewById(R.id.tvMsg_msg);
+        tvMsg_status      = findViewById(R.id.tvMsg_status);
+
+
 
         movieList = new ArrayList<>();
         allStr    = new StringBuilder();
@@ -135,8 +146,8 @@ public class MainActivity2 extends AppCompatActivity {
         // Shared Preferences
         sp       = getSharedPreferences("MySharedPref", MODE_PRIVATE);
         link_sp  = sp.getString("link", "");
+        // update_link = link_sp + "gsm_api.php?action=update";
         update_link = link_sp + "test_api.php?action=update";
-//        linkUrl  = link_sp;
         timegap_sms_sp  = sp.getString("timeGap_msgz", "");
         timegap_mnts_sp = sp.getString("timeGap_mnts", "");
         app_pin         = sp.getString("pin", "");
@@ -145,11 +156,11 @@ public class MainActivity2 extends AppCompatActivity {
         // Intents
         settings_intent = new Intent(this, Settings.class);
         loginreg_intent = new Intent(this, LoginRegActivity.class);
-        sendsms_intent = new Intent(this, SendSMS.class);
+        sendsms_intent  = new Intent(this, SendSMS.class);
         tutorial_intent = new Intent(this, Tutorial.class);
         tutorial_intent = new Intent(this, MainActivity2.class);
 
-        // updateSendSmsValue(1, 0);
+         // updateSendSmsValue(1, 1);
 
         // If no API Link found
         if (link_sp == null || link_sp.equals("")) {
@@ -170,6 +181,9 @@ public class MainActivity2 extends AppCompatActivity {
         // If not connected to WiFi or Data
         if (isConnected()) {
             Log.d(TAG, "onCreate: Connected to internet - WiFi Opened");
+
+            Log.d(TAG, "onCreate: link_sp: " +  link_sp);
+            Log.d(TAG, "onCreate: update_link: " + update_link);
             // Yes, connected, do animations
             // Ref: https://androiddvlpr.com/android-button-animation/
             ibButtonStart.setAlpha(0f);
@@ -264,21 +278,26 @@ public class MainActivity2 extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
 
+                Log.d(TAG, "onCreate: link_sp xx1: " +  link_sp);
+                Log.d(TAG, "onCreate: update_link xx2: " + update_link);
+
                 if (response.code()!=200){
                     Log.d(TAG, "Not working, Status Code: " + response.code());
+                    Log.d(TAG, "onResponse: jsonResponse 3: " + response);
                 }else{
                     Log.d(TAG, "Status 200 OK");
                 }
 
                 JSONResponse jsonResponse = response.body();
 
-                Log.d(TAG, "onResponse: jsonResponse 11: " + jsonResponse);
+                Log.d(TAG, "onResponse: jsonResponse 1: " + jsonResponse);
+                Log.d(TAG, "onResponse: jsonResponse 2: " + response);
 
                 if (jsonResponse == null){
                     return;
                 }
 
-                assert jsonResponse != null;
+                // assert jsonResponse != null;
                 // movieList = new ArrayList<>(Arrays.asList(jsonResponse.getMoviesArray()));
 
                 movieList = new ArrayList<>(jsonResponse.getMoviesArray());
@@ -313,18 +332,20 @@ public class MainActivity2 extends AppCompatActivity {
                     strMsg_msg = num.getMessage();
                     strMsg_status = num.getStatus();
 
-
-
                     // If  found new message , we will send right away.
                     if (num.getStatus().equals("0")){
-                        // TODO Send unsent messages
-                        Log.e(TAG, "Found new messages whoes value is ZERO");
-                        // sendSMS(num.getMobile(), num.getMessage());
-                        // updateSendSmsValue(num.getId(), 1); // int id, int status
 
+                        Log.e(TAG, "Found new messages whoes value is ZERO");
                         Log.d(TAG, "Found new message for ID: " + num.getStatus() + " : Name : " + num.getName() + "\n");
                         // if_busy = true;
                         // Log.e(TAG, "Found new messages flag changed to true");
+
+                        // TODO Check again for permission if granted
+                        // TODO Send unsent messages
+                        sendSMS(num.getMobile(), num.getMessage());
+                        // TODO See if message is sent or not (return type) - then update SMS Status
+                        updateSendSmsValue(num.getId(), 1); // int id, int status
+
                         try {
                             Log.d(TAG, "onResponse: NOW IN SLEEP MODE AFTER SENDING SMS");
                             Thread.sleep(1000);
@@ -350,11 +371,10 @@ public class MainActivity2 extends AppCompatActivity {
 //                        superListView.setAdapter(myAdapter);
 //                        superListView.setAdapter(new ArrayAdapter<Movie>(getApplicationContext(), android.R.layout.simple_list_item_1, jsonResponse.getMoviesArray()));
 
-
                         tvMessagesFoundtxt.setText("Fetching Finished..Loops: " + numberOfLoops);
                         // tvRetroResponse.setText("Fetched: \n" + allStr);
 
-                        tvMsg_srno.setText(strMsg_srno);
+                        tvMsg_srno.setText(""+strMsg_srno);
                         tvMsg_name.setText(strMsg_name);
                         tvMsg_mobile.setText(strMsg_mobile);
                         tvMsg_msg.setText(strMsg_msg);
@@ -404,7 +424,7 @@ public class MainActivity2 extends AppCompatActivity {
                     public void run() {
                         Toast.makeText(getApplicationContext(), "YES: " + oneHeroes[0], Toast.LENGTH_LONG).show();
                         Log.d(TAG, oneHeroes[0]);
-                        superListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, oneHeroes));
+                        // superListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, oneHeroes));
                     }
                 });
 
@@ -502,6 +522,8 @@ public class MainActivity2 extends AppCompatActivity {
     }
 
     public void sendSMS(final String phoneNumber, String message) {
+        Log.d(TAG, "sendSMS: inside sendSMS method.");
+
         boolean sent = false;
         String SENT      = "SMS_SENT";
         String DELIVERED = "SMS_DELIVERED";
@@ -522,9 +544,16 @@ public class MainActivity2 extends AppCompatActivity {
             sentIntents.add(sentPI);
             deliveryIntents.add(deliveredPI);
         }
-
+        Log.d(TAG, "sendSMS: inside sendSMS now here .");
         mMessageSentParts = 0;
         sms.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, deliveryIntents);
+
+        Log.d(TAG, "sendSMS: SMS SUCCESSFULLY SENT NOW 2");
+//        if () == true){
+//
+//        }
+
+
 
     } // eof sendSMS()
 
@@ -589,16 +618,52 @@ public class MainActivity2 extends AppCompatActivity {
     public void btnClickStartThread(View view) {
         Log.d(TAG, "btnClickStartThread: Button clicked 111: " + is_thread_running);
 
-
-
-
         if (isConnected()){
             if (is_thread_running){
                 start_thread();
                 ibButtonStart.animate().rotation(360).setDuration(1000);
-                //ibButtonStart.animate().alpha(1f).setDuration(500);
                 ibButtonStart.setBackgroundResource(R.drawable.icons8_on);
                 is_thread_running = false;
+
+
+                // Cards Animations Slide | Hide
+                card_view_settings.setAlpha(1f);
+                card_view_settings.setTranslationX(500);
+                card_view_settings.animate().alpha(0f).translationXBy(500).setDuration(1500);
+
+                card_view_messages.setAlpha(1f);
+                card_view_messages.setTranslationX(-500);
+                card_view_messages.animate().alpha(0f).translationXBy(-500).setDuration(1500);
+
+                // On Off Button Card
+                card_view_on_off.setAlpha(0f);
+                card_view_on_off.setTranslationY(0);
+                card_view_on_off.animate().alpha(1f).translationYBy(-340).setDuration(1500);
+
+                // Statistics Card
+                card_view_statistics.setAlpha(0f);
+                card_view_statistics.setTranslationY(0);
+                card_view_statistics.animate().alpha(1f).translationYBy(-340).setDuration(1500);
+
+                // Messages Card
+                card_view_messages_2.setAlpha(0f);
+                card_view_messages_2.setTranslationY(0);
+                card_view_messages_2.animate().alpha(1f).translationYBy(-340).setDuration(1500);
+
+
+                card_view_on_off.animate().withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+//                      card_view_settings.setVisibility(View.GONE);
+//                      card_view_messages.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                // eof Cards Animations Slide | Hide
+
+
             }else{
                 stop_thread();
                 ibButtonStart.animate().rotation(0).setDuration(500);
@@ -644,34 +709,7 @@ public class MainActivity2 extends AppCompatActivity {
                 return true;
             case R.id.about:
                 Toast.makeText(getApplicationContext(), "About Selected", Toast.LENGTH_SHORT).show();
-
-
-
-                card_view_settings.setAlpha(1f);
-                card_view_settings.setTranslationX(500);
-                card_view_settings.animate().alpha(0f).translationXBy(500).setDuration(1500);
-
-                card_view_messages.setAlpha(1f);
-                card_view_messages.setTranslationX(-500);
-                card_view_messages.animate().alpha(0f).translationXBy(-500).setDuration(1500);
-
-                card_view_on_off.setAlpha(0f);
-                card_view_on_off.setTranslationY(0);
-                card_view_on_off.animate().alpha(1f).translationYBy(-340).setDuration(1500);
-
-                card_view_on_off.animate().withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-
-//                        card_view_settings.setVisibility(View.GONE);
-//                        card_view_messages.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
-
-
-                    }
-                });
-
-
+                // startActivity(tutorial_intent);
 
                 return true;
             default:

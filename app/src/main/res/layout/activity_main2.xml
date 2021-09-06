@@ -150,7 +150,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center"
-
+                android:onClick="btnClickStartThread"
                 android:adjustViewBounds="true"
                 android:background="@drawable/icons8_off"
                 android:paddingTop="10dp"
@@ -165,7 +165,7 @@
 
         <!-- STATISTICS Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_view4"
+            android:id="@+id/card_view_statistics"
             android:layout_width="300dp"
             android:layout_height="130dp"
             android:layout_gravity="center"
@@ -224,7 +224,7 @@
 
         <!-- MESSAGES FOUND Card -->
         <androidx.cardview.widget.CardView
-            android:id="@+id/card_view5"
+            android:id="@+id/card_view_messages_2"
             android:layout_width="300dp"
             android:layout_height="130dp"
             android:layout_gravity="center"
@@ -260,7 +260,7 @@
                     android:layout_height="match_parent"
                     android:layout_weight="7"
                     android:textSize="10sp"
-                    android:text="Sr. No" />
+                    android:text="ID. No" />
 
                 <!--Name-->
                 <TextView

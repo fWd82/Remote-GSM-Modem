@@ -5,8 +5,8 @@ import retrofit2.http.GET;
 
 public interface MovieApi {
 
- // @GET("api/test_api.php?action=fetch_all")
-    @GET("api/test_api.php?action=fetch_new")
+ // @GET("api/gsm_api.php?action=fetch_all")
+    @GET("test_api.php?action=fetch_new")
 
     Call<JSONResponse> getMovies();
 

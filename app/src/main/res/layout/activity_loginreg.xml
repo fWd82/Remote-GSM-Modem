@@ -5,9 +5,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/gradient_background"
+    android:background="#48BABABA"
     tools:context=".LoginRegActivity"
     >
+
+
+    <!--         Main Card -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="20dp"
+        android:padding="20dp"
+        app:cardCornerRadius="30dp"
+        >
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -15,6 +27,7 @@
         android:layout_height="wrap_content"
         >
 
+<!--        LOGIN-->
         <TextView
             android:id="@+id/textView"
             android:layout_width="wrap_content"
@@ -27,6 +40,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--        Enter PIN to Login -->
         <EditText
             android:id="@+id/et_pin"
             android:layout_width="wrap_content"
@@ -40,6 +54,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+<!--        ENTER -->
         <Button
             android:id="@+id/btn_enter"
             android:layout_width="wrap_content"
@@ -51,6 +66,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/et_pin" />
 
+<!--        Set PIN for app -->
         <EditText
             android:id="@+id/et_set_pin"
             android:layout_width="wrap_content"
@@ -64,11 +80,12 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
+<!--        SET PIN -->
         <Button
             android:id="@+id/btn_set_pin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:onClick="btnSetPin"
             android:text="SET PIN"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,5 +95,7 @@
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
 
 </ScrollView>
