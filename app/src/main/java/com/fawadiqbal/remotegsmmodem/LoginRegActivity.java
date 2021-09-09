@@ -21,6 +21,7 @@ public class LoginRegActivity extends AppCompatActivity {
     Button btn_enter, btn_set_pin;
     EditText et_enterpin, et_setpin;
     Intent settings_intent, sendsms_intent, main_intent;
+    View card_view_set_pin, card_view_enter_pin;
     String pin;
 
     SharedPreferences sh;
@@ -41,17 +42,27 @@ public class LoginRegActivity extends AppCompatActivity {
         et_enterpin = findViewById(R.id.et_pin);
         et_setpin = findViewById(R.id.et_set_pin);
 
+        // Cards
+        card_view_set_pin = findViewById(R.id.card_view_set_pin);
+        card_view_enter_pin = findViewById(R.id.card_view_enter_pin);
+
         sh = getSharedPreferences("MySharedPref", MODE_PRIVATE);
         String pin = sh.getString("pin", "");
         // Log.d(TAG, "onCreate: pin value is: " + pin);
 
+        // if no pin is set, create | set PIN
         if (pin.equals("")){
-            btn_enter.setVisibility(View.INVISIBLE);
-            et_enterpin.setVisibility(View.INVISIBLE);
+            card_view_set_pin.setVisibility(View.VISIBLE);
+            card_view_enter_pin.setVisibility(View.GONE);
+//            btn_enter.setVisibility(View.INVISIBLE);
+//            et_enterpin.setVisibility(View.INVISIBLE);
             Log.d(TAG, "onCreate: equal empty");
         }else{
-            btn_set_pin.setVisibility(View.INVISIBLE);
-            et_setpin.setVisibility(View.INVISIBLE);
+            card_view_enter_pin.setVisibility(View.VISIBLE);
+            card_view_set_pin.setVisibility(View.GONE);
+
+//            btn_set_pin.setVisibility(View.INVISIBLE);
+//            et_setpin.setVisibility(View.INVISIBLE);
             Log.d(TAG, "onCreate: not empty");
         }
 
@@ -90,15 +101,29 @@ public class LoginRegActivity extends AppCompatActivity {
 
         Toast.makeText(this, "PIN Create Successfully!", Toast.LENGTH_LONG).show();
 
-        btn_enter.setVisibility(View.VISIBLE);
-        et_enterpin.setVisibility(View.VISIBLE);
+        //card_view_set_pin.setVisibility(View.GONE);
+        //card_view_enter_pin.setVisibility(View.VISIBLE);
+
+
+
+
+        // Cards Animations Slide | Hide
+        //card_view_set_pin.setAlpha(1f);
+        card_view_set_pin.animate().alpha(0f).setDuration(1500);
+        card_view_set_pin.setVisibility(View.GONE);
+
+        card_view_enter_pin.setVisibility(View.VISIBLE);
+        card_view_enter_pin.setAlpha(0f);
+        card_view_enter_pin.animate().alpha(1f).setDuration(1500);
+
+
+
+        et_enterpin.requestFocus();
         Log.d(TAG, "onCreate: equal empty");
-        btn_set_pin.setVisibility(View.GONE);
-        et_setpin.setVisibility(View.GONE);
 
     }
 
-    // Enter App by providing PIN
+    // Enter App by providing PIN | LOGIN
     public void btnClickEnter(View view) {
 
         pin = et_enterpin.getText().toString();
@@ -114,6 +139,7 @@ public class LoginRegActivity extends AppCompatActivity {
                 Log.d(TAG, "btnClickEnter: YES PIN = PIN_SH: " + pin_sh +" : "+ pin);
                 et_enterpin.setBackgroundResource(R.drawable.et_normal);
                 et_enterpin.setText("");
+                finish();
                 startActivity(main_intent);
             }else{
                 Log.d(TAG, "btnClickEnter: NO PIN != PIN_SH: " + pin_sh +" : "+ pin);
@@ -121,7 +147,6 @@ public class LoginRegActivity extends AppCompatActivity {
                 et_enterpin.setError("Wrong PIN");
                 et_enterpin.setBackgroundResource(R.drawable.et_error);
                 Toast.makeText(this, "Please Enter Correct PIN", Toast.LENGTH_LONG).show();
-
             }
         }else{
             et_enterpin.setBackgroundResource(R.drawable.et_error);
@@ -131,40 +156,4 @@ public class LoginRegActivity extends AppCompatActivity {
 
     } // eof btnClickEnter();
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        switch (id) {
-            case R.id.settings:
-                settings_intent = new Intent(this, Settings.class);
-                startActivity(settings_intent);
-                Toast.makeText(getApplicationContext(), "Settings Selected", Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.sendsms:
-                sendsms_intent = new Intent(this, SendSMS.class);
-                startActivity(sendsms_intent);
-                Toast.makeText(getApplicationContext(), "Send SMS Selected", Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.home:
-                LoginRegActivity.this.finish();
-//                main_intent = new Intent(this, MainActivity.class);
-//                startActivity(main_intent);
-                Toast.makeText(getApplicationContext(), "Home Selected", Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.tutorial:
-                Toast.makeText(getApplicationContext(), "Tutorial Selected", Toast.LENGTH_LONG).show();
-                return true;
-            case R.id.about:
-                Toast.makeText(getApplicationContext(), "About Selected", Toast.LENGTH_LONG).show();
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
 }

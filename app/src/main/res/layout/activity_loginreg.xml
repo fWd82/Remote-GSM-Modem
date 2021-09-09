@@ -5,97 +5,130 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#48BABABA"
+    android:background="#48EAEAEA"
     tools:context=".LoginRegActivity"
     >
 
-
-    <!--         Main Card -->
-    <androidx.cardview.widget.CardView
-        android:id="@+id/card_view"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_margin="20dp"
-        android:padding="20dp"
-        app:cardCornerRadius="30dp"
-        >
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
+        android:layout_marginTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
         >
 
-<!--        LOGIN-->
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
+        <!--         Card Set Pin-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_set_pin"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="76dp"
-            android:text="LOGIN"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:padding="20dp"
+            app:cardCornerRadius="30dp">
 
-<!--        Enter PIN to Login -->
-        <EditText
-            android:id="@+id/et_pin"
-            android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <!--        Create PIN-->
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="CREATE PIN"
+                    android:textSize="24sp"
+                    android:textStyle="normal" />
+
+                <!--        Set PIN for app -->
+                <EditText
+                    android:id="@+id/et_set_pin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="Set PIN for app"
+                    android:inputType="number" />
+
+                <!--        SET PIN -->
+                <Button
+                    android:id="@+id/btn_set_pin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:onClick="btnSetPin"
+                    android:text="SET PIN" />
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
+
+        <!--         Card Enter / Loin-->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_view_enter_pin"
+            android:layout_width="300dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="168dp"
-            android:autofillHints="12345"
-            android:ems="10"
-            android:hint="Enter PIN to Login"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:padding="20dp"
+            app:cardCornerRadius="30dp">
 
-<!--        ENTER -->
-        <Button
-            android:id="@+id/btn_enter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:onClick="btnClickEnter"
-            android:text="ENTER"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.507"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_pin" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="10dp">
+                <!--        LOGIN-->
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="50dp"
+                    android:text="LOGIN"
+                    android:textSize="24sp"
+                    android:textStyle="normal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-<!--        Set PIN for app -->
-        <EditText
-            android:id="@+id/et_set_pin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
-            android:ems="10"
-            android:hint="Set PIN for app"
-            android:inputType="number"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
+                <!--        Enter PIN to Login -->
+                <EditText
+                    android:id="@+id/et_pin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:autofillHints="12345"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:hint="Enter PIN to Login"
+                    android:inputType="number"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-<!--        SET PIN -->
-        <Button
-            android:id="@+id/btn_set_pin"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:onClick="btnSetPin"
-            android:text="SET PIN"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.51"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/et_set_pin" />
+                <!--        ENTER -->
+                <Button
+                    android:id="@+id/btn_enter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:onClick="btnClickEnter"
+                    android:text="ENTER"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.507"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_pin" />
+
+            </LinearLayout>
+        </androidx.cardview.widget.CardView>
 
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.cardview.widget.CardView>
 
+    </RelativeLayout>
 </ScrollView>

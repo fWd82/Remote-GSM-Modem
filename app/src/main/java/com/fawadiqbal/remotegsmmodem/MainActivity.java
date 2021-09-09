@@ -24,6 +24,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fawadiqbal.remotegsmmodem.JSONResponse;
+import com.fawadiqbal.remotegsmmodem.LoginRegActivity;
+import com.fawadiqbal.remotegsmmodem.Movie;
+import com.fawadiqbal.remotegsmmodem.MovieApi;
+import com.fawadiqbal.remotegsmmodem.R;
+import com.fawadiqbal.remotegsmmodem.SendSMS;
+import com.fawadiqbal.remotegsmmodem.Settings;
+import com.fawadiqbal.remotegsmmodem.Tutorial;
 import com.fawadiqbal.remotegsmmodem.update.Results;
 import com.fawadiqbal.remotegsmmodem.update.RetrofitClient;
 
@@ -44,15 +52,29 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.Url;
 
 public class MainActivity extends AppCompatActivity {
-    TextView tvRetroResponse, tvRetroResponse_status, tvRetroResponse_status0;
+    TextView tvRetroResponse_status;
+    TextView tvMessagesFound, tvMessagesFoundtxt;
+    TextView tvMsg_srno, tvMsg_name, tvMsg_mobile, tvMsg_msg, tvMsg_status;
+
     List<Movie> movieList;
     ImageButton ibButtonStart;
+
+    View card_view_settings, card_view_messages, card_view_on_off, card_view_statistics, card_view_messages_2;
+
     Handler handler = new Handler();
+
     StringBuilder allStr;
+    int strMsg_srno;
+    String strMsg_name;
+    String strMsg_mobile;
+    String strMsg_msg;
+    String strMsg_status;
+
 
     Intent settings_intent, sendsms_intent, loginreg_intent, tutorial_intent;
 
-    MainThread mainThread;
+    com.fawadiqbal.remotegsmmodem.MainActivity.MainThread mainThread;
+
     ListView superListView;
     private static final String TAG = "TAG";
     private volatile boolean exit = false;
@@ -80,22 +102,36 @@ public class MainActivity extends AppCompatActivity {
 
     public static String linkUrl = "";
 
-    // Not using now
-//    public static String getLink() {
-//        return linkUrl;
-//    }
-
+    private static final int TIME_INTERVAL = 2000; // # milliseconds, desired time passed between two back presses.
+    private long mBackPressed;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        superListView           = findViewById(R.id.superListView);
-        tvRetroResponse         = findViewById(R.id.tvRetroResponse);
+        //superListView           = findViewById(R.id.superListView);
+
+        tvMessagesFound         = findViewById(R.id.tvMessagesFound);
+        tvMessagesFoundtxt      = findViewById(R.id.tvMessagesFoundtxt);
+
+        card_view_settings      = findViewById(R.id.card_view_settings);
+        card_view_messages      = findViewById(R.id.card_view_messages);
+        card_view_on_off      = findViewById(R.id.card_view_on_off);
+        card_view_statistics      = findViewById(R.id.card_view_statistics);
+        card_view_messages_2      = findViewById(R.id.card_view_messages_2);
+
         tvRetroResponse_status  = findViewById(R.id.tvRetroResponse_status);
-        tvRetroResponse_status0 = findViewById(R.id.tvRetroResponse_status0);
         ibButtonStart           = findViewById(R.id.ibStartThread);
+
+
+        tvMsg_srno        = findViewById(R.id.tvMsg_srno);
+        tvMsg_name        = findViewById(R.id.tvMsg_name);
+        tvMsg_mobile      = findViewById(R.id.tvMsg_mobile);
+        tvMsg_msg         = findViewById(R.id.tvMsg_msg);
+        tvMsg_status      = findViewById(R.id.tvMsg_status);
+
+
 
         movieList = new ArrayList<>();
         allStr    = new StringBuilder();
@@ -105,8 +141,8 @@ public class MainActivity extends AppCompatActivity {
         // Shared Preferences
         sp       = getSharedPreferences("MySharedPref", MODE_PRIVATE);
         link_sp  = sp.getString("link", "");
+        // update_link = link_sp + "gsm_api.php?action=update";
         update_link = link_sp + "test_api.php?action=update";
-//        linkUrl  = link_sp;
         timegap_sms_sp  = sp.getString("timeGap_msgz", "");
         timegap_mnts_sp = sp.getString("timeGap_mnts", "");
         app_pin         = sp.getString("pin", "");
@@ -115,31 +151,34 @@ public class MainActivity extends AppCompatActivity {
         // Intents
         settings_intent = new Intent(this, Settings.class);
         loginreg_intent = new Intent(this, LoginRegActivity.class);
-        sendsms_intent = new Intent(this, SendSMS.class);
+        sendsms_intent  = new Intent(this, SendSMS.class);
         tutorial_intent = new Intent(this, Tutorial.class);
-        tutorial_intent = new Intent(this, MainActivity2.class);
+        //intent = new Intent(this, MainActivity.class);
 
-         // updateSendSmsValue(1, 0);
+        // updateSendSmsValue(1, 1);
 
         // If no API Link found
         if (link_sp == null || link_sp.equals("")) {
             Log.e(TAG, "API Link is null");
-            tvRetroResponse.setText("API Link not set");
-            tvRetroResponse_status.setText("Please go to Settings and enter API Link");
-            MainActivity.this.finish();
+            tvMessagesFound.setText("API Link not set");
+            tvMessagesFoundtxt.setText("Please go to Settings and enter API Link");
+            com.fawadiqbal.remotegsmmodem.MainActivity.this.finish();
             startActivity(settings_intent);
         }
         Log.e(TAG, "Link is: " + link_sp);
 
         // If the app has no pin
         if(app_pin== null || app_pin.equals("")){
-            MainActivity.this.finish();
+            com.fawadiqbal.remotegsmmodem.MainActivity.this.finish();
             startActivity(loginreg_intent);
         }
 
         // If not connected to WiFi or Data
         if (isConnected()) {
             Log.d(TAG, "onCreate: Connected to internet - WiFi Opened");
+
+            Log.d(TAG, "onCreate: link_sp: " +  link_sp);
+            Log.d(TAG, "onCreate: update_link: " + update_link);
             // Yes, connected, do animations
             // Ref: https://androiddvlpr.com/android-button-animation/
             ibButtonStart.setAlpha(0f);
@@ -147,7 +186,7 @@ public class MainActivity extends AppCompatActivity {
             ibButtonStart.animate().alpha(1f).translationYBy(-50).setDuration(1500);
 
             Log.d(TAG, "Method Loaded: Checking for flag value: " + is_thread_running);
-            
+
             if (is_thread_running) {
                 ibButtonStart.setBackgroundResource(R.drawable.icons8_on);
 
@@ -180,11 +219,11 @@ public class MainActivity extends AppCompatActivity {
         if(link_sp== null || link_sp.equals(""))
         {
             Log.e(TAG, "ALI Link is null");
-            tvRetroResponse.setText("API Link not set");
-            tvRetroResponse_status.setText("Please go to Settings and enter API Link");
+            tvMessagesFound.setText("API Link not set");
+            tvMessagesFoundtxt.setText("Please go to Settings and enter API Link");
             startActivity(settings_intent);
         }else{
-            mainThread = new MainThread(mobileSmscWaitTime);
+            mainThread = new MainActivity.MainThread(mobileSmscWaitTime);
             mainThread.start();
         }
 
@@ -207,7 +246,7 @@ public class MainActivity extends AppCompatActivity {
     // ***************************************************************** //
 
     public void fetch_data() throws InterruptedException {
-        Log.d(TAG, "inside fetch_data() Method ");
+        Log.d(TAG, "Inside fetch_data() Method ");
         Log.d(TAG, "TIME: " + time);
 
         numberOfLoops++;
@@ -215,8 +254,8 @@ public class MainActivity extends AppCompatActivity {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                tvRetroResponse_status0.setText("fetch_data(): Loops: " + numberOfLoops);
-                tvRetroResponse_status.setText("Fetching now. Loops: " + numberOfLoops);
+                tvMessagesFoundtxt.setText("No of Loops: " + numberOfLoops);
+                Log.d(TAG, "run: Fetching now. Loops: " + numberOfLoops);
             }
         });
 
@@ -234,21 +273,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<JSONResponse> call, Response<JSONResponse> response) {
 
+                Log.d(TAG, "onCreate: link_sp xx1: " +  link_sp);
+                Log.d(TAG, "onCreate: update_link xx2: " + update_link);
+
                 if (response.code()!=200){
                     Log.d(TAG, "Not working, Status Code: " + response.code());
+                    Log.d(TAG, "onResponse: jsonResponse 3: " + response);
                 }else{
                     Log.d(TAG, "Status 200 OK");
                 }
 
                 JSONResponse jsonResponse = response.body();
 
-                Log.d(TAG, "onResponse: jsonResponse 11: " + jsonResponse);
+                Log.d(TAG, "onResponse: jsonResponse 1: " + jsonResponse);
+                Log.d(TAG, "onResponse: jsonResponse 2: " + response);
 
                 if (jsonResponse == null){
                     return;
                 }
 
-                assert jsonResponse != null;
+                // assert jsonResponse != null;
                 // movieList = new ArrayList<>(Arrays.asList(jsonResponse.getMoviesArray()));
 
                 movieList = new ArrayList<>(jsonResponse.getMoviesArray());
@@ -277,16 +321,26 @@ public class MainActivity extends AppCompatActivity {
                             .append(num.getMessage()).append(" : \t")
                             .append(" Status: ").append(num.getStatus()).append(" \n");
 
+                    strMsg_srno = num.getId();
+                    strMsg_name = num.getName();
+                    strMsg_mobile = num.getMobile();
+                    strMsg_msg = num.getMessage();
+                    strMsg_status = num.getStatus();
+
                     // If  found new message , we will send right away.
                     if (num.getStatus().equals("0")){
-                        // TODO Send unsent messages
-                        Log.e(TAG, "Found new messages whoes value is ZERO");
-                        // sendSMS(num.getMobile(), num.getMessage());
-                        // updateSendSmsValue(num.getId(), 1); // int id, int status
 
+                        Log.e(TAG, "Found new messages whoes value is ZERO");
                         Log.d(TAG, "Found new message for ID: " + num.getStatus() + " : Name : " + num.getName() + "\n");
                         // if_busy = true;
                         // Log.e(TAG, "Found new messages flag changed to true");
+
+                        // TODO Check again for permission if granted
+                        // TODO Send unsent messages
+                        sendSMS(num.getMobile(), num.getMessage());
+                        // TODO See if message is sent or not (return type) - then update SMS Status
+                        updateSendSmsValue(num.getId(), 1); // int id, int status
+
                         try {
                             Log.d(TAG, "onResponse: NOW IN SLEEP MODE AFTER SENDING SMS");
                             Thread.sleep(1000);
@@ -310,12 +364,17 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
 //                        ArrayAdapter<Movie> myAdapter = new ArrayAdapter<Movie>(this, android.R.layout.simple_expandable_list_item_1, movieList);
 //                        superListView.setAdapter(myAdapter);
-//
-                        //superListView.setAdapter(new ArrayAdapter<Movie>(getApplicationContext(), android.R.layout.simple_list_item_1, jsonResponse.getMoviesArray()));
+//                        superListView.setAdapter(new ArrayAdapter<Movie>(getApplicationContext(), android.R.layout.simple_list_item_1, jsonResponse.getMoviesArray()));
 
+                        tvMessagesFoundtxt.setText("Fetching Finished..Loops: " + numberOfLoops);
+                        // tvRetroResponse.setText("Fetched: \n" + allStr);
 
-                        tvRetroResponse_status.setText("Fetching Finished..Loops: " + numberOfLoops);
-                        tvRetroResponse.setText("Fetched: \n" + allStr);
+                        tvMsg_srno.setText(""+strMsg_srno);
+                        tvMsg_name.setText(strMsg_name);
+                        tvMsg_mobile.setText(strMsg_mobile);
+                        tvMsg_msg.setText(strMsg_msg);
+                        tvMsg_status.setText(strMsg_msg);
+
                     }
                 });
 
@@ -326,9 +385,9 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<JSONResponse> call, Throwable throwable) {
                 // Error Messages:
 
-                tvRetroResponse.setText(throwable.toString());
+                tvMessagesFoundtxt.setText(throwable.toString());
                 Log.e(TAG, throwable.toString());
-                Toast.makeText(MainActivity.this,throwable.toString(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(com.fawadiqbal.remotegsmmodem.MainActivity.this,throwable.toString(),Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -360,7 +419,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         Toast.makeText(getApplicationContext(), "YES: " + oneHeroes[0], Toast.LENGTH_LONG).show();
                         Log.d(TAG, oneHeroes[0]);
-                        superListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, oneHeroes));
+                        // superListView.setAdapter(new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, oneHeroes));
                     }
                 });
 
@@ -371,6 +430,14 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error: "+t, Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    public void btnClickSettings(View view) {
+        startActivity(settings_intent);
+    }
+
+    public void btnClickMessages(View view) {
+        startActivity(sendsms_intent);
     }
 
 
@@ -458,6 +525,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void sendSMS(final String phoneNumber, String message) {
+        Log.d(TAG, "sendSMS: inside sendSMS method.");
+
         boolean sent = false;
         String SENT      = "SMS_SENT";
         String DELIVERED = "SMS_DELIVERED";
@@ -478,9 +547,16 @@ public class MainActivity extends AppCompatActivity {
             sentIntents.add(sentPI);
             deliveryIntents.add(deliveredPI);
         }
-
+        Log.d(TAG, "sendSMS: inside sendSMS now here .");
         mMessageSentParts = 0;
         sms.sendMultipartTextMessage(phoneNumber, null, parts, sentIntents, deliveryIntents);
+
+        Log.d(TAG, "sendSMS: SMS SUCCESSFULLY SENT NOW 2");
+//        if () == true){
+//
+//        }
+
+
 
     } // eof sendSMS()
 
@@ -549,14 +625,94 @@ public class MainActivity extends AppCompatActivity {
             if (is_thread_running){
                 start_thread();
                 ibButtonStart.animate().rotation(360).setDuration(1000);
-                //ibButtonStart.animate().alpha(1f).setDuration(500);
                 ibButtonStart.setBackgroundResource(R.drawable.icons8_on);
                 is_thread_running = false;
+
+
+                // Cards Animations Slide | Hide -- START
+                card_view_settings.setAlpha(1f);
+                card_view_settings.setTranslationX(500);
+                card_view_settings.animate().alpha(0f).translationXBy(500).setDuration(1500);
+
+                card_view_messages.setAlpha(1f);
+                card_view_messages.setTranslationX(-500);
+                card_view_messages.animate().alpha(0f).translationXBy(-500).setDuration(1500);
+
+                // On Off Button Card
+                card_view_on_off.setAlpha(1f);
+                card_view_on_off.setTranslationY(0);
+                card_view_on_off.animate().alpha(1f).translationYBy(-340).setDuration(1500);
+
+                // Statistics Card
+                card_view_statistics.setAlpha(0f);
+                card_view_statistics.setTranslationY(0);
+                card_view_statistics.animate().alpha(1f).translationYBy(-340).setDuration(1500);
+
+                // Messages Card
+                card_view_messages_2.setAlpha(0f);
+                card_view_messages_2.setTranslationY(0);
+                card_view_messages_2.animate().alpha(1f).translationYBy(-340).setDuration(1500);
+
+
+                card_view_on_off.animate().withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+//                      card_view_settings.setVisibility(View.GONE);
+//                      card_view_messages.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                // eof Cards Animations Slide | Hide
+
+
             }else{
                 stop_thread();
                 ibButtonStart.animate().rotation(0).setDuration(500);
                 ibButtonStart.setBackgroundResource(R.drawable.icons8_off);
                 is_thread_running = true;
+
+
+                // Cards Animations Slide | Hide -- STOP
+                card_view_settings.setAlpha(0f);
+                card_view_settings.setTranslationX(0);
+                card_view_settings.animate().alpha(1f).translationXBy(450).setDuration(1500);
+
+                card_view_messages.setAlpha(0f);
+                card_view_messages.setTranslationX(0);
+                card_view_messages.animate().alpha(1f).translationXBy(-450).setDuration(1500);
+
+                //
+                // On Off Button Card
+                card_view_on_off.setAlpha(1f);
+                // card_view_on_off.setTranslationY(35);
+                card_view_on_off.animate().alpha(1f).translationYBy(340).setDuration(1500);
+
+                // Statistics Card
+                card_view_statistics.setAlpha(0.5f);
+                //card_view_statistics.setTranslationY(0);
+                card_view_statistics.animate().alpha(1f).translationYBy(340).setDuration(1500);
+
+                // Messages Card
+                card_view_messages_2.setAlpha(0.5f);
+                //card_view_messages_2.setTranslationY(0);
+                card_view_messages_2.animate().alpha(1f).translationYBy(340).setDuration(1500);
+
+
+                card_view_on_off.animate().withEndAction(new Runnable() {
+                    @Override
+                    public void run() {
+//                      card_view_settings.setVisibility(View.GONE);
+//                      card_view_messages.setVisibility(View.GONE);
+                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+
+                // eof Cards Animations Slide | Hide
+
+
             }
         } else {
             Toast.makeText(getApplicationContext(), "No internet Connection!", Toast.LENGTH_SHORT).show();
@@ -596,7 +752,8 @@ public class MainActivity extends AppCompatActivity {
                 // Toast.makeText(getApplicationContext(), "Tutorial Selected", Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.about:
-                Toast.makeText(getApplicationContext(), "About Selected", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "No page associated!", Toast.LENGTH_SHORT).show();
+                // startActivity(about_intent);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -605,7 +762,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        Toast.makeText(getApplicationContext(), "Back Pressed", Toast.LENGTH_SHORT).show();
-        super.onBackPressed();
+//        Toast.makeText(getApplicationContext(), "Back Pressed", Toast.LENGTH_SHORT).show();
+        if (mBackPressed + TIME_INTERVAL > System.currentTimeMillis())
+        {
+            super.onBackPressed();
+            return;
+        }
+        else { Toast.makeText(getBaseContext(), "Tap back button in order to exit", Toast.LENGTH_SHORT).show(); }
+        mBackPressed = System.currentTimeMillis();
     }
 } // eof MainActivity{}
