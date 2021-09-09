@@ -67,7 +67,6 @@
 
                 <!--For Text and Icon-->
                 <LinearLayout
-                    android:onClick="btnClickSettings"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -75,6 +74,7 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:onClick="btnClickSettings"
                         android:id="@+id/imgSettings"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -98,13 +98,12 @@
 
             <!-- A CardView that contains a Message Icon and Text -->
             <androidx.cardview.widget.CardView
+                android:id="@+id/card_view_messages"
                 android:layout_width="150dp"
                 android:layout_height="100dp"
-                android:onClick="btnClickMessages"
                 app:cardCornerRadius="30dp">
                 <!--For Text and Icon-->
                 <LinearLayout
-                    android:id="@+id/card_view_messages"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
@@ -112,6 +111,7 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:onClick="btnClickMessages"
                         android:id="@+id/imgSendMessage"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

@@ -653,19 +653,18 @@ public class MainActivity extends AppCompatActivity {
                 card_view_messages_2.setTranslationY(0);
                 card_view_messages_2.animate().alpha(1f).translationYBy(-340).setDuration(1500);
 
-
-                card_view_on_off.animate().withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-//                      card_view_settings.setVisibility(View.GONE);
-//                      card_view_messages.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+//
+//                card_view_on_off.animate().withEndAction(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                      card_view_settings.setVisibility(View.GONE);
+////                      card_view_messages.setVisibility(View.GONE);
+//                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
 
                 // eof Cards Animations Slide | Hide
-
 
             }else{
                 stop_thread();
@@ -700,15 +699,15 @@ public class MainActivity extends AppCompatActivity {
                 card_view_messages_2.animate().alpha(1f).translationYBy(340).setDuration(1500);
 
 
-                card_view_on_off.animate().withEndAction(new Runnable() {
-                    @Override
-                    public void run() {
-//                      card_view_settings.setVisibility(View.GONE);
-//                      card_view_messages.setVisibility(View.GONE);
-                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
-
-                    }
-                });
+//                card_view_on_off.animate().withEndAction(new Runnable() {
+//                    @Override
+//                    public void run() {
+////                      card_view_settings.setVisibility(View.GONE);
+////                      card_view_messages.setVisibility(View.GONE);
+//                        Toast.makeText(getApplicationContext(), "Animation Finished ", Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                });
 
                 // eof Cards Animations Slide | Hide
 
