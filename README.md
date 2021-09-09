@@ -100,12 +100,10 @@ Any contribution is welcome. Please push your changes to branch `development`
 
 ## SCREENSHOTS
 
-![Screenshot_1631220087](https://user-images.githubusercontent.com/19715150/132762190-3779febc-0d1a-4866-b031-fbbe364abea7.png)
-![Screenshot_1631220122](https://user-images.githubusercontent.com/19715150/132762203-4a3b3b1d-5314-40c0-836a-e02f9f4ff362.png)
-![Screenshot_1631220133](https://user-images.githubusercontent.com/19715150/132762215-fb25634b-47f5-4680-af83-b73c6ea8aedf.png)
-![Screenshot_1631220156](https://user-images.githubusercontent.com/19715150/132762222-b62d5d09-21bf-4e7a-84fb-7767be921e65.png)
-![Screenshot_1631220183](https://user-images.githubusercontent.com/19715150/132762223-3f1e69a6-4238-4dad-afc4-088b35128c5b.png)
-![Screenshot_1631220231](https://user-images.githubusercontent.com/19715150/132762227-615c3b8d-e3a6-4f5e-bcc0-988c6c4d75ec.png)
-![Screenshot_1631220255](https://user-images.githubusercontent.com/19715150/132762229-fa6429f7-e68b-421d-8d5a-23b11ab51978.png)
-
-
+<img src="https://user-images.githubusercontent.com/19715150/132762190-3779febc-0d1a-4866-b031-fbbe364abea7.png" width="200">
+<img src="https://user-images.githubusercontent.com/19715150/132762203-4a3b3b1d-5314-40c0-836a-e02f9f4ff362.png" width="200">
+<img src="https://user-images.githubusercontent.com/19715150/132762215-fb25634b-47f5-4680-af83-b73c6ea8aedf.png" width="200">
+<img src="https://user-images.githubusercontent.com/19715150/132762222-b62d5d09-21bf-4e7a-84fb-7767be921e65.png" width="200">
+<img src="https://user-images.githubusercontent.com/19715150/132762223-3f1e69a6-4238-4dad-afc4-088b35128c5b.png" width="200">
+<img src="https://user-images.githubusercontent.com/19715150/132762227-615c3b8d-e3a6-4f5e-bcc0-988c6c4d75ec.png" width="200">
+<img src="https://user-images.githubusercontent.com/19715150/132762229-fa6429f7-e68b-421d-8d5a-23b11ab51978.png" width="200">
